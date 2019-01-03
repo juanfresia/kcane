@@ -1,0 +1,47 @@
+; --------------------------------------------------
+;       KEEP CODING AND NOBODY EXPLODES (KCANE)
+; --------------------------------------------------
+; Project for 66.09.Laboratorio de Microcomputadoras
+; Faculty of Engineering, University of Buenos Aires
+;
+; By Ana Czarnitzki, Alejandro García & Juan Fresia
+; 
+; --------------------------------------------------
+;
+; --------------------------------------------------
+;              TFT GENERAL DEFINITIONS
+; --------------------------------------------------
+
+	.EQU TFT_WIDTH, 240
+	.EQU TFT_HEIGHT, 320
+
+	.EQU ILI9341_SOFTRESET, 0x01
+	.EQU ILI9341_SLEEPIN, 0x10
+	.EQU ILI9341_SLEEPOUT, 0x11
+	.EQU ILI9341_NORMALDISP, 0x13
+	.EQU ILI9341_INVERTOFF, 0x20
+	.EQU ILI9341_INVERTON, 0x21
+	.EQU ILI9341_GAMMASET, 0x26
+	.EQU ILI9341_DISPLAYOFF, 0x28
+	.EQU ILI9341_DISPLAYON, 0x29
+	.EQU ILI9341_COLADDRSET, 0x2A
+	.EQU ILI9341_PAGEADDRSET, 0x2B
+	.EQU ILI9341_MEMORYWRITE, 0x2C
+	.EQU ILI9341_PIXELFORMAT, 0x3A
+	.EQU ILI9341_FRAMECONTROL, 0xB1
+	.EQU ILI9341_DISPLAYFUNC, 0xB6
+	.EQU ILI9341_ENTRYMODE, 0xB7
+	.EQU ILI9341_POWERCONTROL1, 0xC0
+	.EQU ILI9341_POWERCONTROL2, 0xC1
+	.EQU ILI9341_VCOMCONTROL1, 0xC5
+	.EQU ILI9341_VCOMCONTROL2, 0xC7
+	.EQU ILI9341_MEMCONTROL, 0x36
+	.EQU ILI9341_MADCTL, 0x36
+
+	.EQU ILI9341_MADCTL_MY, 0x80
+	.EQU ILI9341_MADCTL_MX, 0x40
+	.EQU ILI9341_MADCTL_MV, 0x20
+	.EQU ILI9341_MADCTL_ML, 0x10
+	.EQU ILI9341_MADCTL_RGB, 0x00
+	.EQU ILI9341_MADCTL_BGR, 0x08
+	.EQU ILI9341_MADCTL_MH, 0x04

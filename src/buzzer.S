@@ -1,0 +1,212 @@
+; --------------------------------------------------
+;       KEEP CODING AND NOBODY EXPLODES (KCANE)
+; --------------------------------------------------
+; Project for 66.09.Laboratorio de Microcomputadoras
+; Faculty of Engineering, University of Buenos Aires
+;
+; By Ana Czarnitzki, Alejandro García & Juan Fresia
+; 
+; --------------------------------------------------
+;
+; --------------------------------------------------
+;                BUZZER FUNCTIONS
+; --------------------------------------------------
+	.GLOBAL SETUP_BUZZER
+	.GLOBAL RANDGEN
+
+	.EQU BUZZER_PORT, PORTD
+	.EQU BUZZER_DDR, DDRD
+	.EQU BUZZER_PIN_NUMBER, 0
+
+CSEG
+
+; Sets the buzzer pin as output and clears it.
+SETUP_BUZZER:
+	SBI BUZZER_DDR, BUZZER_PIN_NUMBER
+	CBI BUZZER_PORT, BUZZER_PIN_NUMBER
+	RET
+
+; Plays a tone on the buzzer for some time. The
+; 'on' and 'off' times of the buzzer in microseconds
+; are received on R24 and R22 respectively.
+BUZZER_PLAY:
+	SBI BUZZER_PORT, BUZZER_PIN_NUMBER
+	MOV R25, R24
+	CALL HALF_MICRO_DELAY
+	MOV R25, R24
+	CALL HALF_MICRO_DELAY
+	CBI BUZZER_PORT, BUZZER_PIN_NUMBER
+	MOV R25, R22
+	CALL HALF_MICRO_DELAY
+	MOV R25, R22
+	CALL HALF_MICRO_DELAY
+	RET
+
+; Plays a tone on the buzzer that will last for
+; (R24 + R22) * R20 * R18 microseconds. In the
+; bottom, R24 and R22 will directly map to the 'on'
+; and 'off' times of the buzzer, so they should be
+; equal for a duty cycle of 50%.
+BUZZER_TONE_GENERIC:
+	PUSH R13
+	PUSH R14
+	PUSH R15
+	PUSH R16
+	PUSH R17
+	MOV R17, R24
+	MOV R16, R22
+	MOV R15, R20
+	MOV R14, R18
+buzzer_tone_loop_1:	
+	MOV R13, R15
+buzzer_tone_loop_2:	
+	MOV R24, R17
+	MOV R22, R16
+	CALL BUZZER_PLAY
+	DEC R13
+	BRNE buzzer_tone_loop_2
+	DEC R14
+	BRNE buzzer_tone_loop_1	
+	POP R17
+	POP R16
+	POP R15
+	POP R14
+	POP R13
+	RET	
+
+; Buzzer tone functions to be called on minigames
+
+BUZZER_TONE_1:
+	LDI R24, 220
+	LDI R22, 220
+	LDI R20, 180
+	LDI R18, 1
+	CALL BUZZER_TONE_GENERIC
+	RET
+
+BUZZER_TONE_2:
+	LDI R24, 200
+	LDI R22, 200
+	LDI R20, 198
+	LDI R18, 1
+	CALL BUZZER_TONE_GENERIC
+	RET
+
+BUZZER_TONE_3:
+	LDI R24, 180
+	LDI R22, 180
+	LDI R20, 110
+	LDI R18, 2
+	CALL BUZZER_TONE_GENERIC
+	RET
+	
+BUZZER_TONE_4:
+	LDI R24, 160
+	LDI R22, 160
+	LDI R20, 123
+	LDI R18, 2
+	CALL BUZZER_TONE_GENERIC
+	RET
+	
+BUZZER_TONE_5:
+	LDI R24, 120
+	LDI R22, 120
+	LDI R20, 115
+	LDI R18, 2
+	CALL BUZZER_TONE_GENERIC
+	RET
+
+BUZZER_TONE_6:
+	LDI R24, 80
+	LDI R22, 80
+	LDI R20, 165
+	LDI R18, 3
+	CALL BUZZER_TONE_GENERIC
+	RET
+
+; Plays a victory fanfare with the buzzer.
+BUZZER_VICTORY_FANFARE:
+	CALL BUZZER_TONE_3
+	CALL BUZZER_TONE_3
+	CALL BUZZER_TONE_4
+	CALL BUZZER_TONE_4
+	CALL BUZZER_TONE_5
+	RET
+	
+; Plays a defeat fanfare with the buzzer.
+BUZZER_DEFEAT_FANFARE:
+	CALL BUZZER_TONE_2
+	CALL BUZZER_TONE_2
+	CALL BUZZER_TONE_2
+	CALL BUZZER_TONE_1
+	CALL BUZZER_TONE_1
+	RET
+
+BUZZER_DELAY:
+	PUSH ZL
+	PUSH ZH
+	PUSH R16
+	PUSH R17
+	PUSH R18
+	PUSH R19
+	PUSH R20
+	LDI R16, 15
+buzzer_delay_loop:	
+	CALL SHOW_DISPLAYS
+	DEC R16
+	BRNE buzzer_delay_loop
+	POP R20
+	POP R19
+	POP R18
+	POP R17
+	POP R16
+	POP ZH
+	POP ZL
+	RET
+	
+BUZZER_EXPLOSION_FANFARE:
+	CALL BUZZER_TONE_2
+	CALL BUZZER_TONE_2
+	CALL BUZZER_TONE_2
+	CALL BUZZER_TONE_2
+	CALL BUZZER_TONE_2
+	CALL BUZZER_DEFEAT_FANFARE
+	CALL BUZZER_DELAY
+	CALL BUZZER_TONE_1
+	CALL BUZZER_TONE_1
+	CALL BUZZER_TONE_1
+	CALL BUZZER_TONE_2
+	CALL BUZZER_TONE_2
+	CALL BUZZER_TONE_2
+	CALL BUZZER_TONE_2
+	CALL BUZZER_DELAY
+	CALL BUZZER_TONE_2
+	CALL BUZZER_TONE_2
+	CALL BUZZER_TONE_2
+	CALL BUZZER_TONE_1
+	CALL BUZZER_TONE_1
+	CALL BUZZER_DEFEAT_FANFARE
+	RET
+	
+BUZZER_DEACTIVATION_FANFARE:
+	CALL BUZZER_TONE_3
+	CALL BUZZER_TONE_3
+	CALL BUZZER_TONE_3
+	CALL BUZZER_TONE_3
+	CALL BUZZER_DELAY
+	CALL BUZZER_TONE_4
+	CALL BUZZER_TONE_4
+	CALL BUZZER_TONE_4
+	CALL BUZZER_DELAY
+	CALL BUZZER_TONE_3
+	CALL BUZZER_TONE_3
+	CALL BUZZER_DELAY
+	CALL BUZZER_TONE_5
+	CALL BUZZER_TONE_5
+	CALL BUZZER_DELAY
+	CALL BUZZER_TONE_4
+	CALL BUZZER_TONE_4
+	CALL BUZZER_DELAY
+
+	CALL BUZZER_VICTORY_FANFARE
+	RET
