@@ -20,4 +20,4 @@ utilizará un microcontrolador de 8 bits, displays de 7 segmentos para la cuenta
 regresiva de la bomba, y una pantalla táctil para la representación de los
 varios juegos.
 
-## [Link al manual](https://docs.google.com/document/d/16s0jQqirD27Z8GegP4isQ7dIeCSq4jZHitMbh4ExTxw/edit?usp=sharing)
+## [Link al manual](/docs/manual.pdf)
